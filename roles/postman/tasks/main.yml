@@ -1,0 +1,40 @@
+---
+ - name: check if postman is installed
+   become: yes
+   stat:
+     path: '{{ postman_install_dir }}'
+   register: postman_installed
+   failed_when: False
+
+- name: Download postman-desktop package
+  get_url:
+    url: '{{ postman_url }}'
+    dest: '{{ postman_download_dir }}/{{ postman_filename }}'
+    use_proxy: yes
+    validate_certs: yes
+    mode: 'u=rw,go=r'
+  when: postman_installed.stdout.find('ii') == -1
+
+- name: Install postman-desktop
+  unarchive:
+    src: '{{ postman_download_dir }}/{{ postman_filename }}'
+    remote_src: yes
+    dest: '{{ postman_install_dir }}'
+    extra_opts:
+      - '--strip-components=1'
+    owner: root
+    group: root
+    creates: '{{ postman_install_dir }}/Postman'
+  when: slack_installed.stdout.find('ii') == -1
+
+- name: "Copy default postman config for user {{ ansible_env.USER }}"
+  copy:
+    src: 'postman'
+    dest: '{{ ansible_env.HOME }}/.local/share/applications/Postman.desktop'
+    owner: '{{ ansible_env.USER }}'
+    group: '{{ ansible_env.USER }}'
+    force: no
+
+- name: Remove downloaded package
+  file: path={{ postman_download_dir }}/{{ postman_filename }} state=absent
+  when: slack_installed.stdout.find('ii') == -1
