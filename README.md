@@ -12,8 +12,20 @@ Ansible roles to setup Ubuntu desktop and Ubuntu server (18.04). This playbook i
 First, you need to install Git and Ansible :
 ```
 sudo apt-get install git
-git https://github.com/angelfs/ansible-development.git
-cd ansible-development
+```
+
+Create SSH key, details [here](https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+
+```
+ssh-keygen -t rsa -b 4096 -C "julian.marie@web-atrio.com"
+```
+
+Add to your github account: Settings > SSH and GPG keys > new SSH, details [here](https://help.github.com/en/articles/adding-a-new-ssh-key-to-your-github-account)
+
+Clone the project and install ansible
+```
+git clone git@github.com:angelfs/workstation-dev.git
+cd workstation-dev
 ./install.sh
 ```
 
