@@ -1,0 +1,12 @@
+---
+# URL to download the Postman redistributable package from
+postman_url: "https://dl.pstmn.io/download/latest/linux64"
+
+# Name of the Postman download file
+postman_download_dir: "/tmp"
+
+# Name of the Postman download file
+postman_filename: "postman-desktop.tar.gz"
+
+# Base installation directory for the Postman distribution
+postman_install_dir: '/opt/postman/'
