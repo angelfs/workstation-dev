@@ -1,5 +1,6 @@
 # Ansible Ubuntu setup
-Ansible roles to setup Ubuntu desktop and Ubuntu server (14.04 and 16.04). This playbook is focused on quickly deploying a "ready to use" dev machine.
+
+Ansible roles to setup Ubuntu desktop and Ubuntu server (18.04). This playbook is focused on quickly deploying a "ready to use" dev machine.
 
 
 ## Requirements
@@ -11,8 +12,8 @@ Ansible roles to setup Ubuntu desktop and Ubuntu server (14.04 and 16.04). This 
 First, you need to install Git and Ansible :
 ```
 sudo apt-get install git
-git clone https://github.com/Benoth/ansible-ubuntu.git
-cd ansible-ubuntu
+git https://github.com/angelfs/ansible-development.git
+cd ansible-development
 ./install.sh
 ```
 
