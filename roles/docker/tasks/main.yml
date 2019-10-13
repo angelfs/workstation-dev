@@ -1,25 +1,37 @@
 ---
+- name: add docker apt key
+  apt_key: keyserver=hkp://ha.pool.sks-keyservers.net:80 id=58118E89F3A912897C070ADBF76221572C52609D
 
-- name: Installing apt-key
-  apt_key: id="F76221572C52609D" url=https://apt.dockerproject.org/gpg state=present
+- name: add docker repository
+  apt_repository: repo='deb https://apt.dockerproject.org/repo ubuntu-{{ docker_ubuntu_version }} main' state=present update_cache=yes
 
-- name: Add deb repository
-  apt_repository: repo='deb https://apt.dockerproject.org/repo ubuntu-{{ ansible_distribution_release }} main' state=present
+- name: install docker
+  apt: name=docker-engine
 
-- name: Install
-  apt: pkg="{{ item }}" state=latest update_cache=yes
-  with_items:
-    - linux-image-extra-virtual
-    - docker-engine
-
-- name: Create Docker group
+- name: create docker group
   group: name=docker state=present
 
-- name: Add current user to Docker group
-  user: name="{{ ansible_env.USER }}" groups=docker append=yes
+- name: add docker group to user
+  user: name={{ ansible_user }} groups=docker append=yes
 
-- name: "Ensure Docker is {{ docker.start | ternary('started','stopped') }}"
-  service: name=docker state={{ docker.start | ternary('restarted','stopped') }} enabled={{ docker.service_enabled }}
+- name: ensure docker start on boot and is running
+  service: name=docker state=started enabled=yes
 
-- name: Install docker-compose
-  get_url: url="https://github.com/docker/compose/releases/download/1.9.0/docker-compose-Linux-x86_64" dest=/usr/local/bin/docker-compose force=no mode=0755
+- name: check if docker compose is installed
+  stat: path=/usr/local/bin/docker-compose
+  register: docker_compose_binary
+
+- name: install docker compose
+  shell: "curl -L \"https://github.com/docker/compose/releases/download/{{ docker_composer_version }}/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose"
+  when: not docker_compose_binary.stat.exists
+
+- name: make docker compose executable
+  file: path=/usr/local/bin/docker-compose state=touch mode="u+x,g+x,o+x"
+
+- name: check if docker compose completion is installed
+  stat: path=/etc/bash_completion.d/docker-compose
+  register: docker_compose_completion
+
+- name: install docker compose shell completion
+  shell: "curl -L https://raw.githubusercontent.com/docker/compose/$(docker-compose version --short)/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose"
+  when: not docker_compose_completion.stat.exists
