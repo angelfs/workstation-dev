@@ -1,5 +1,4 @@
 ---
 
-docker:
-  start: false
-  service_enabled: no
+docker_ubuntu_version: xenial
+docker_composer_version: 1.9.0
