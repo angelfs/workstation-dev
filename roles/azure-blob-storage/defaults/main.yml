@@ -1,0 +1,12 @@
+
+---
+azure_blob_storage_url: "https://download.microsoft.com/download/A/E/3/AE32C485-B62B-4437-92F7-8B6B2C48CB40/StorageExplorer-linux-x64.tar.gz"
+
+# Name of the Postman download file
+azure_blob_storage_download_dir: "/tmp"
+
+# Name of the Postman download file
+azure_blob_storage_filename: "azure-blob-storage-desktop.tar.gz"
+
+# Base installation directory for the Postman distribution
+azure_blob_storage_install_dir: '/opt/azure-storage/'
