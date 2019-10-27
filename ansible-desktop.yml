@@ -43,6 +43,7 @@
     # - { role: desktop-cleanup, become: true }
     # - { role: desktop-autostart, become: true }
     # - { role: desktop-preferences-unity }
+    # - { role: azure-blob-storage, become: true }
     # - { role: adapta-theme, become: true }
     # - { role: albert, become: true }
     # - { role: altyo, become: true }
@@ -71,6 +72,7 @@
     # - { role: nemo, become: true }
     # - { role: notepadqq, become: true }
     # - { role: notify-osd, become: true }
+    # - { role: phpstorm, become: true }
     # - { role: qutebrowser, become: true }
     # - { role: remarkable, become: true }
     # - { role: remmina, become: true }

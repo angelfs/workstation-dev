@@ -1,0 +1,32 @@
+---
+- name: check if azure-blob-storage-desktop is installed
+  become: yes
+  stat:
+    path: '{{ azure_blob_storage_install_dir }}'
+  register: azure_blob_storage_installed
+  failed_when: False
+
+- name: Download azure-blob-storage-desktop package
+  get_url:
+    url: '{{ azure_blob_storage_url }}'
+    dest: '{{ azure_blob_storage_download_dir }}/{{ azure_blob_storage_filename }}'
+    use_proxy: yes
+    validate_certs: yes
+    mode: 'u=rw,go=r'
+  when: azure_blob_storage_installed.stdout.find('ii') == -1
+
+- name: Install azure-blob-storage-desktop
+  unarchive:
+    src: '{{ azure_blob_storage_download_dir }}/{{ azure_blob_storage_filename }}'
+    remote_src: yes
+    dest: '{{ azure_blob_storage_install_dir }}'
+    extra_opts:
+      - '--strip-components=1'
+    owner: root
+    group: root
+    creates: '{{ azure_blob_storage_install_dir }}/azure-blob-storage'
+  when: slack_installed.stdout.find('ii') == -1
+
+- name: Remove downloaded package
+  file: path={{ azure_blob_storage_download_dir }}/{{ azure_blob_storage_filename }} state=absent
+  when: slack_installed.stdout.find('ii') == -1
