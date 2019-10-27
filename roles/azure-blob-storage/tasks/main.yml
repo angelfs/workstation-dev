@@ -27,6 +27,14 @@
     creates: '{{ azure_blob_storage_install_dir }}/azure-blob-storage'
   when: slack_installed.stdout.find('ii') == -1
 
+- name: "Copy default azure-blob-storage config for user {{ ansible_env.USER }}"
+  copy:
+    src: 'azure-blob-storage'
+    dest: '{{ ansible_env.HOME }}/.local/share/applications/AzureBlobStorage.desktop'
+    owner: '{{ ansible_env.USER }}'
+    group: '{{ ansible_env.USER }}'
+    force: no
+
 - name: Remove downloaded package
   file: path={{ azure_blob_storage_download_dir }}/{{ azure_blob_storage_filename }} state=absent
   when: slack_installed.stdout.find('ii') == -1
